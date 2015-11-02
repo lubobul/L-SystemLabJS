@@ -1,0 +1,937 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="viewport" content="width=device-width" />
+
+<title>L-system lab 1.1</title>
+</head>
+
+<body>
+
+
+
+<style>
+    body {
+        font-size: .85em;
+        font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+        color: #232323;
+        background-color: #fff;
+    }
+
+    header, footer, nav, section {
+        display: block;
+    }
+
+    /* Styles for basic forms
+    -----------------------------------------------------------*/
+    fieldset {
+        border: 1px solid #ddd;
+        padding: 0 1.4em 1.4em 1.4em;
+        margin: 0 0 1.5em 0;
+    }
+
+    legend {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    textarea {
+        min-height: 75px;
+    }
+
+    .editor-label {
+        margin: 1em 0 0 0;
+    }
+
+    .editor-field {
+        margin: 0.5em 0 0 0;
+    }
+
+    h1 {
+        display: block;
+        font-size: 2em;
+        -webkit-margin-before: 0.67em;
+        -webkit-margin-after: 0.67em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+    }
+
+    h3 {
+        display: block;
+        font-size: 1.17em;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+    }
+
+    h4 {
+        display: block;
+        -webkit-margin-before: 1.33em;
+        -webkit-margin-after: 1.33em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+    }
+
+    p {
+        display: block;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+    }
+
+
+    /* Styles for validation helpers
+    -----------------------------------------------------------*/
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+
+    .header4 {
+        padding: 2px 0px 2px 0px;
+        margin: 2px 0px 2px 0px;
+        color: gray;
+    }
+
+    button.fractalize {
+        cursor: pointer; 
+        padding: 5px 15px; 
+        margin-top: 10px;
+        background: gray; 
+        border: 1px solid #585858; 
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 0 2px rgba(0,0,0, .75);
+        -moz-box-shadow: 0 0 2px rgba(0,0,0, .75);
+        box-shadow: 0 0 2px rgba(0,0,0, .75);
+        color: #f3f3f3;
+        font-size: 1.1em;
+    }
+
+    input.my-inputs {
+        padding: 5px 15px;
+        background: #f3f3f3; 
+        border: 1px solid #585858;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 3px;
+        width:5.5em;
+        -webkit-box-shadow: 0 0 2px rgba(0,0,0, .75);
+        -moz-box-shadow: 0 0 2px rgba(0,0,0, .75);
+        box-shadow: 0 0 2px rgba(0,0,0, .75);
+        color: #000000;
+        font-size: 1.1em;
+    }
+
+    input.extra-width{
+        width:14.6em;
+    }
+
+    button.fractalize:hover, button.fractalize:focus {
+        background-color: #898989; 
+        -webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
+        -moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
+        box-shadow: 0 0 1px rgba(0,0,0, .75);
+    }
+
+    .loading {
+        color: #bd2222;
+        padding-top: 0px;
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+
+    .done {
+        color: #2ab731;
+        padding-top: 0px;
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+
+    .loading-div {
+        padding-top: 10px;
+    }
+
+    #header {
+        color: gray;
+        margin: 0 auto 0 auto;
+        text-align: center;
+    }
+
+    #footer {
+        color: gray;
+        margin: 0 auto 0 auto;
+        text-align: center;
+    }
+
+    .menu {
+        float: left;
+        width: 260px;
+        -webkit-box-shadow: 0 0 3px rgba(0,0,0, .75);
+        -moz-box-shadow: 0 0 3px rgba(0,0,0, .75);
+        box-shadow: 0 0 3px rgba(0,0,0, .75);
+        padding: 5px;
+        background-color: white;
+    }
+
+    .canvas-holder {
+        float: left;
+        width: auto;
+        -webkit-box-shadow: 0 0 3px rgba(0,0,0, .75);
+        -moz-box-shadow: 0 0 3px rgba(0,0,0, .75);
+        box-shadow: 0 0 3px rgba(0,0,0, .75);
+        background-color: white;
+        
+    }
+
+    .menu-canvas-wrapper {
+        width: 1800px;
+        height: auto;
+        margin-bottom: 2em;
+        
+    }
+
+    .info {
+        margin: 0px 2px 0px 2px;
+        padding: 0px 2px 0px 2px;
+        color: gray;
+    }
+
+    body {
+        background-color: #fafafa;
+    }
+
+    .rule2-holder {
+        width:200px;
+    }
+
+    .rule2-checkbox-label {
+        margin: 0px 2px 0px 2px;
+        padding: 0px 2px 0px 2px;
+        color: gray;
+    }
+
+    .menu-options {
+        width: 1795px;
+        height: 45px;
+        background-color: transparent;
+    }
+
+    .menu-options-button{
+        
+        margin-right:0.0em;
+    }
+
+    .about-popup {
+        width: 500px;
+        height: 380px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -150px 0 0 -250px; /* [-(height/2)px 0 0 -(width/2)px] */
+        padding:1em;
+        display: none;
+        background: rgba(0,0,0, .8);
+    }
+
+    .loading-popup {
+        width: 102px;
+        height: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -15px 0 0 -48px; /* [-(height/2)px 0 0 -(width/2)px] */
+        padding: 0;
+        display: none;
+        background: rgba(0,0,0, .8);
+    }
+
+    .close-about {
+        float: right;
+        border: none;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .close-about:hover {
+        float: right;
+        border: none;
+        background-color: #f3f3f3;
+        cursor: pointer;
+    }
+
+    p.text-rendering {
+        color: white;
+        padding: 2px 5px 0px 5px;
+        margin: 0;
+        font-size: 1.3em;
+    }
+</style>
+
+<div id="loading-popup" class="loading-popup"><p class="text-rendering">Rendering...</p></div>
+<div id="popup" class="about-popup">
+    <button class="close-about" onclick="CloseAbout()">X</button>
+	<h3 class="header4" style="color:white">Author </h3>
+    <p style="color:white">Lyubomir Dimitrov Stoychev</p>
+    <h3 class="header4" style="color:white">Rules </h3>
+	<p style="color:white"> F = Draw straight; R-Draw straight (R is not substituted with the seed when iterating) Minus = Turn anti-clockwise; Plus = Turn clockwise; X does not correspond to any drawing action and is used to control the evolution of the curve.</p>
+    <p style="color:white"> [ corresponds to saving the current values for position and angle, which are restored when the corresponding ] is executed.</p>
+    <h3 class="header4" style="color:white">About </h3>
+    <p style="color:white">This tool is intended for experimenting with L-systems defined by up to 2 rules. Calculation of huge L-systems will be rendered slower or may freeze your browser. </p>
+	<p id="footer" style="color:white">L-system Lab V1.1 You are allowed to copy, distribute and modify the source as you wish. Just remember to give reference to the source.</p> <p id="footer" style="color:white">2014-2015</p>
+</div>
+
+<h1 id="header">Welcome to L-system Lab 1.1</h1>
+
+<h3 class="header4">What are you waiting for? Plant a seed and examine the beauty and complexity that will arise.</h3>
+
+<div class="menu-canvas-wrapper">
+
+    <div class="menu-options">
+        
+        <button class="fractalize menu-options-button" onclick="KochCurve()">Koch Curve</button>
+        <button class="fractalize menu-options-button" onclick="LevyCurve()">Levy C Curve</button>
+        <button class="fractalize menu-options-button" onclick="Tree()">Tree</button>
+        <button class="fractalize menu-options-button" onclick="Other1()">Other 1</button>
+        <button class="fractalize menu-options-button" onclick="Other2()">Other 2</button>
+        <button class="fractalize menu-options-button" onclick="About()">About</button>
+    </div>
+    <div class="menu">
+
+        <h3 class="header4">Settings</h3>
+        <h4 class="header4">Rule 1 </h4>
+
+        <div style="width:500px">
+            <input id="seed1" class="my-inputs extra-width" type="text" value="+F--F+" required />
+        </div>
+
+        <div style="width:100px;">
+            <h4 class="header4">Rule 2 </h4>
+            <input id="rule2_select" onclick="ChangeInputBoxState()" type="checkbox">
+            <label class="rule2-checkbox-label" id="rule2-checkbox-label">Enable</label>
+
+        </div>
+
+        <div style="width:500px;">
+            <input id="seed2" class="my-inputs extra-width" type="text" value="FF" required readonly />
+        </div>
+
+        <h4 class="header4">Angle to turn </h4>
+        <input id="angle" class="my-inputs" type="number" value="45" min="0" max="360" required />
+        <h4 class="header4">Drawing line length</h4>
+        <input id="pix-per-dot" class="my-inputs" type="number" value="10" min="1" max="200" required />
+        <h4 class="header4">Iterations </h4>
+        <input id="ittr" class="my-inputs" type="number" value="9" min="1" max="100" required />
+        
+        <h4 class="header4">Color wheel 0-360</h4>
+        <input id="color" onclick="ChangeColorState()" type="checkbox">
+        <label class="rule2-checkbox-label" id="color-checkbox-label">Enable</label>
+        <div style="width:500px;">
+            <input id="hsf-value1" class="my-inputs" type="number" value="0" min="0" max="360" required readonly/>
+            <label class="rule2-checkbox-label">-</label>
+            <input id="hsf-value2" class="my-inputs" type="number" value="360" min="0" max="360" required readonly/>
+        </div>
+
+        <h4 class="header4">Randomize angle between 0-360</h4>
+        <input id="angle-state" onclick="ChangeRandomizeAngleState()" type="checkbox">
+        <label class="rule2-checkbox-label" id="randomize-angle-checkbox-label">Enable</label>
+        <div style="width:500px;">
+            <input id="randomize-angle-value1" class="my-inputs" type="number" value="35" min="0" max="360" required readonly />
+            <label class="rule2-checkbox-label">-</label>
+            <input id="randomize-angle-value2" class="my-inputs" type="number" value="45" min="0" max="360" required readonly />
+        </div>
+
+        <h3 class="header4">Starting coordinates</h3>
+        <p class="info">Click on the canvas to select the starting coordinates</p>
+        <h4 class="header4">Offset X </h4>
+        <input id="offset-x" class="my-inputs" type="number" value="500" required />
+        <h4 class="header4">Offset Y </h4>
+        <input id="offset-y" class="my-inputs" type="number" value="250" required />
+        <br/>
+
+            <button class="fractalize" style="float:none" onclick="Fractalize()">Render</button>
+        </div>
+
+    <div class="canvas-holder" style="background-color:white;">
+        <canvas id="canvas" width="1500" height="800" tabindex="0"></canvas>
+    </div>
+    
+</div>
+<script>
+
+    var random_angle_state = false;
+
+    window.onload = function () {
+
+        Fractalize();
+    }
+
+    function Loading() {
+        document.getElementById("loading-popup").style.display = "block";
+    }
+
+    function DoneLoading() {
+        document.getElementById("loading-popup").style.display = "none";
+    }
+
+    function About() {
+        var popup = document.getElementById("popup"); 
+        popup.style.display = 'block';
+    }
+
+    function CloseAbout() {
+        var popup = document.getElementById("popup");
+        popup.style.display = 'none';
+    }
+
+    function ResetForRule1() {
+
+        document.getElementById("randomize-angle-value1").value = 35;
+        document.getElementById("randomize-angle-value2").value = 45;
+        document.getElementById("randomize-angle-checkbox-label").innerHTML = "Enable";
+        document.getElementById("randomize-angle-value1").readOnly = true;
+        document.getElementById("randomize-angle-value2").readOnly = true;
+        document.getElementById("angle-state").checked = false;
+
+        //colors hsf-value1
+        document.getElementById("hsf-value1").value = 0;
+        document.getElementById("hsf-value2").value = 360;
+        document.getElementById("color-checkbox-label").innerHTML = "Enable";
+        document.getElementById("hsf-value1").readOnly = true;
+        document.getElementById("hsf-value2").readOnly = true;
+        document.getElementById("color").checked = false;
+
+        document.getElementById("rule2-checkbox-label").innerHTML = "Enable";
+        document.getElementById("seed2").readOnly = true;
+        document.getElementById("rule2_select").checked = false;
+
+        random_angle_state = false;
+    }
+
+    function KochCurve() {
+        document.getElementById("ittr").value = 5;
+        document.getElementById("pix-per-dot").value = 1;
+        document.getElementById("angle").value = 90;
+        document.getElementById("offset-y").value = 500;
+        document.getElementById("offset-x").value = 200;
+        document.getElementById("seed1").value = "F-F+F+F-F";
+        document.getElementById("seed2").value = "FF";
+        ResetForRule1();
+
+        Fractalize();
+    }
+
+    function LevyCurve() {
+
+        document.getElementById("ittr").value = 9;
+        document.getElementById("pix-per-dot").value = 10;
+        document.getElementById("angle").value = 45;
+        document.getElementById("offset-y").value = 250;
+        document.getElementById("offset-x").value = 500;
+        document.getElementById("seed1").value = "+F--F+";
+        document.getElementById("seed2").value = "FF";
+        ResetForRule1();
+
+        Fractalize();
+    }
+
+    function Tree() {
+
+        document.getElementById("ittr").value = 6;
+        document.getElementById("pix-per-dot").value = 1;
+        document.getElementById("angle").value = 28;
+        document.getElementById("offset-y").value = 800;
+        document.getElementById("offset-x").value = 500;
+        document.getElementById("seed1").value = "F-[[X]+X]+F[+FX]-X";
+        document.getElementById("seed2").value = "FF";
+        document.getElementById("rule2-checkbox-label").innerHTML = "Disable";
+        document.getElementById("seed2").readOnly = false;
+        document.getElementById("rule2_select").checked = true;
+        random_angle_state = true;
+
+        //angle randomization
+        document.getElementById("randomize-angle-value1").value = 20;
+        document.getElementById("randomize-angle-value2").value = 30;
+        document.getElementById("randomize-angle-checkbox-label").innerHTML = "Disable";
+        document.getElementById("randomize-angle-value1").readOnly = false;
+        document.getElementById("randomize-angle-value2").readOnly = false;
+        document.getElementById("angle-state").checked = true;
+
+        //colors hsf-value1
+        document.getElementById("hsf-value1").value = 35;
+        document.getElementById("hsf-value2").value = 60;
+        document.getElementById("color-checkbox-label").innerHTML = "Disable";
+        document.getElementById("hsf-value1").readOnly = false;
+        document.getElementById("hsf-value2").readOnly = false;
+        document.getElementById("color").checked = true;
+
+        Fractalize();
+    }
+
+    function Other1() {
+        document.getElementById("ittr").value = 6;
+        document.getElementById("pix-per-dot").value = 1;
+        document.getElementById("angle").value = 70;
+        document.getElementById("offset-y").value = 200;
+        document.getElementById("offset-x").value = 200;
+        document.getElementById("seed1").value = "F+F--F+F";
+        document.getElementById("seed2").value = "FF";
+        ResetForRule1();
+
+        Fractalize();
+    }
+
+    function Other2() {
+        document.getElementById("ittr").value = 14;
+        document.getElementById("pix-per-dot").value = 2;
+        document.getElementById("angle").value = 58;
+        document.getElementById("offset-y").value = 400;
+        document.getElementById("offset-x").value = 500;
+        document.getElementById("seed1").value = "+FRRF+";
+        document.getElementById("seed2").value = "FF";
+        ResetForRule1();
+
+        Fractalize();
+    }
+       
+    //ALL TRIVIAL SHIZZLE GOES HERE
+
+    function ValidateFields() {
+       
+
+        var offsetX_val = parseInt(document.getElementById("offset-x").value);
+        var offsetY_val = parseInt(document.getElementById("offset-y").value);
+
+        var seed1 = document.getElementById("seed1").value;
+        var seed2 = document.getElementById("seed2").value;
+
+        var angle_val = parseInt(document.getElementById("angle").value);
+        var pix_per_dot_val = parseInt(document.getElementById("pix-per-dot").value);
+        var num_of_itterations_val = parseInt(document.getElementById("ittr").value);
+
+        var hsf_val1 = parseInt(document.getElementById("hsf-value1").value);
+        var hsf_val2 = parseInt(document.getElementById("hsf-value2").value);
+
+        var randomize_angle_value1 = parseInt(document.getElementById("randomize-angle-value1").value);
+        var randomize_angle_value2 = parseInt(document.getElementById("randomize-angle-value2").value);
+
+        var allowed_chars = "F+-R[]X";
+
+        //illegal chars validation
+        for (i = 0; i < seed1.length; i++) {
+            if (allowed_chars.indexOf(seed1[i]) === -1) {
+                alert("Illegal seed characters detected. Allowed characters: F, R, +, -, X, [, ]");
+                return false;
+            }
+        }
+
+        for (i = 0; i < seed2.length; i++) {
+            if (allowed_chars.indexOf(seed2[i]) === -1) {
+                alert("Illegal seed characters detected. Allowed characters: F, R, +, -, X, [, ]");
+                return false;
+            }
+        }
+
+        //angle validation
+        if (angle_val < 0 || angle_val > 360 || isNaN(angle_val)) {
+            alert("Angle has to be between 0 and 360 degrees");
+            return false;
+        }
+
+        //hsf validation
+        if (hsf_val1 < 0 || hsf_val1 > 360 || hsf_val2 < 0 || hsf_val2 > 360 || isNaN(hsf_val1) || isNaN(hsf_val2)) {
+            alert("Color wheel values have to be between 0 and 360 degrees");
+            return false;
+        }
+
+        if (hsf_val1 > hsf_val2)
+            alert("Color wheel value 1 needs to be lower than value 2");
+
+        //randomize angle validation
+        if (randomize_angle_value1 < 0 || randomize_angle_value1 > 360 || randomize_angle_value2 < 0 || randomize_angle_value2 > 360 || isNaN(randomize_angle_value1) || isNaN(randomize_angle_value2)) {
+            alert("Randomize angle values have to be between 0 and 360 degrees");
+            return false;
+        }
+
+        if (randomize_angle_value1 > randomize_angle_value2)
+            alert("Randomize angle value 1 needs to be lower than value 2");
+
+        //drawing line validation
+        if (pix_per_dot_val < 0 || pix_per_dot_val > 200 || isNaN(pix_per_dot_val)) {
+            alert("Pixels per dot value has to be between 1 and 200");
+            return false;
+        }
+
+        //itterations validation
+        if (num_of_itterations_val < 0 || num_of_itterations_val > 14 || isNaN(num_of_itterations_val)) {
+            alert("Iterations value has to be between 1 and 14");
+            return false;
+        }
+
+        if (seed1.length > 20 || seed2.length > 20) {
+            alert("A seed value is too long");
+            return false;
+        }
+
+        if (isNaN(offsetX_val) || offsetX_val < 0) {
+            alert("Illegal offset X value");
+            return false;
+        }
+
+        if (isNaN(offsetY_val) || offsetY_val < 0) {
+            alert("Illegal offset Y value");
+            return false;
+        }
+
+        return true;
+    }
+
+    //ON-OFF states
+    function ChangeRandomizeAngleState() {
+
+        random_angle_state = document.getElementById("angle-state").checked;
+
+        document.getElementById("randomize-angle-value1").readOnly = !random_angle_state;
+        document.getElementById("randomize-angle-value2").readOnly = !random_angle_state;
+
+        if (random_angle_state) {
+            document.getElementById("randomize-angle-checkbox-label").innerHTML = "Disable";
+        } else {
+            document.getElementById("randomize-angle-checkbox-label").innerHTML = "Enable";
+        }
+    }
+
+    function ChangeColorState() {
+        var color_state = document.getElementById("color").checked;
+
+        document.getElementById("hsf-value1").readOnly = !color_state;
+        document.getElementById("hsf-value2").readOnly = !color_state;
+
+        if (color_state) {
+            document.getElementById("color-checkbox-label").innerHTML = "Disable";
+        } else {
+            document.getElementById("color-checkbox-label").innerHTML = "Enable";
+        }
+    }
+
+
+
+    function ChangeInputBoxState() {
+
+        var rule_2_state = document.getElementById("rule2_select").checked;
+
+        document.getElementById("seed2").readOnly = !rule_2_state;
+
+        //reset to default
+        if (rule_2_state)
+        {
+            document.getElementById("ittr").value = 6;
+            document.getElementById("pix-per-dot").value = 1;
+            document.getElementById("angle").value = 28;
+            document.getElementById("offset-y").value = 800;
+            document.getElementById("offset-x").value = 500;
+            document.getElementById("seed1").value = "F-[[X]+X]+F[+FX]-X";
+            document.getElementById("seed2").value = "FF";
+            document.getElementById("rule2-checkbox-label").innerHTML = "Disable";
+        }
+        else
+        {
+            document.getElementById("ittr").value = 9;
+            document.getElementById("pix-per-dot").value = 10;
+            document.getElementById("angle").value = 45;
+            document.getElementById("offset-y").value = 250;
+            document.getElementById("offset-x").value = 500;
+            document.getElementById("seed1").value = "+F--F+";
+            document.getElementById("seed2").value = "FF";
+            document.getElementById("rule2-checkbox-label").innerHTML = "Enable";
+        }
+    }
+	
+	//This is the main method
+	function Fractalize() {
+
+		//if it fails to validate, break out of the main
+        if (!ValidateFields()) return;
+
+            var offsetX_val = parseInt(document.getElementById("offset-x").value);
+            var offsetY_val = parseInt(document.getElementById("offset-y").value);
+
+            var seed1_val = document.getElementById("seed1").value;
+            var seed2_val = document.getElementById("seed2").value;
+
+            angle = parseInt(document.getElementById("angle").value);
+            pix_per_dot = parseInt(document.getElementById("pix-per-dot").value);
+            var num_of_itterations_val = parseInt(document.getElementById("ittr").value);
+            is_single_colored = !document.getElementById("color").checked;
+
+            //check if values have changed if not use the previosly generated string else render new string
+            if (seed1 != seed1_val || seed2 != seed2_val || num_of_itterations != num_of_itterations_val) {
+
+                seed1 = seed1_val;
+                seed2 = seed2_val;
+
+                num_of_itterations = num_of_itterations_val;
+                fractral_str = GetFractalString(seed1, seed2, num_of_itterations);
+            }
+
+            if (offsetX_val != offsetX || offsetY != offsetY_val) {
+                offsetX = offsetX_val;
+                offsetY = offsetY_val;
+            }
+
+            //360 - HSF
+            factor = ((parseInt(document.getElementById("hsf-value2").value) - parseInt(document.getElementById("hsf-value1").value) ) / fractral_str.length);
+            
+
+            Loading();
+            
+            setTimeout(Draw, 10);
+            
+            setTimeout(DoneLoading, 20);
+        
+    }
+
+    //ALL CANVAS SHIZZLE GOES HERE
+
+    var offsetX = 0;
+    var offsetY = 0;
+
+    var t = -90;
+    var angle = 0;
+    var pix_per_dot = 0;
+
+    var seed1 = "";
+    var seed2 = "";
+
+    var num_of_itterations = 0;
+
+    var tmpX = 0;
+    var tmpY = 0;
+
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+
+    //Get Canvas Coordinates on click
+
+    canvas.addEventListener("mousedown", getPosition, false);
+
+    function getPosition(e) {
+
+        var x;
+        var y;
+
+        if (e.pageX || e.pageY)
+        {
+            x = e.pageX;
+            y = e.pageY;
+        }
+        else
+        {
+            x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        x -= c.offsetLeft;
+        y -= c.offsetTop;
+
+        document.getElementById("offset-x").value = x;
+        document.getElementById("offset-y").value = y;
+    }
+
+
+
+    //Draw a line from posX,posY to posXto, posYto
+    function DrawLine(posX, posY, posXto, posYto) {
+
+        ctx.beginPath();
+        ctx.moveTo(posX + offsetX, posY + offsetY);
+        ctx.lineTo(posXto + offsetX, posYto + offsetY);
+        ctx.stroke();
+    }
+
+    //get random number inclusive of min / max
+    function GetRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    //Polar to rectengular coordination
+    function PolarToRect(R, t) {
+        var x = R * Math.cos(t);
+        var y = R * Math.sin(t);
+
+        var a = [];
+        a[0] = x;
+        a[1] = y;
+
+        return a;
+    }
+
+    //Degrees to radians
+    function DegToRad(deg) {
+        return (Math.PI / 180) * deg;
+    }
+
+    function ClearCanvas() {
+        c.width = c.width;
+        InitCanvasShadow();
+    }
+
+    function InitCanvasShadow() {
+        ctx.strokeStyle = "lightgray";
+        ctx.shadowColor = "black";
+        ctx.shadowOffsetX = 0.3;
+        ctx.shadowOffsetY = 0.3;
+        ctx.shadowBlur = 0.4;
+    }
+
+
+    var color_val = 0;
+    var is_single_colored = true;
+
+    var fractral_str = "";
+    var factor = 0;
+
+    //Generate the rednder string
+    function GetFractalString(seed1, seed2, iti)
+    {
+
+        var is_rule_2_used = document.getElementById("rule2_select").checked;
+
+        var init = seed1;
+
+        var gen_val = "";
+
+        var tmp_seed = "";
+
+        if (is_rule_2_used)
+            tmp_seed = seed2;
+        else
+            tmp_seed = seed1;
+
+        for (j = 0; j < iti; j++)
+        {
+
+            if (is_rule_2_used) {
+                for (i = 0; i < init.length; i++)
+                {
+
+                    if (init[i] == 'X') {
+                        gen_val += seed1;
+                    } else {
+                        gen_val += init[i];
+                    }
+                }
+
+                init = gen_val;
+                gen_val = "";
+            }
+            
+            for (i = 0; i < init.length; i++)
+            {
+                    if (init[i] == 'F') {
+                        gen_val += tmp_seed;
+                    } else {
+                        gen_val += init[i];
+                    }
+            }
+
+                init = gen_val;
+                gen_val = "";
+        }
+
+        return init;
+    }
+
+    var old_vals = [];
+
+    function Draw() {
+        ClearCanvas();
+        color_val = 0;
+        tmpX = 0;
+        tmpY = 0;
+
+        if (document.getElementById("rule2_select").checked) {
+
+            t = -90;
+        } else {
+            t = 0;
+        }
+        
+        for (i = 0; i < fractral_str.length; i++) {
+
+            if (!is_single_colored) {
+                color_val += factor;
+
+                ctx.strokeStyle = "hsl(" + (parseFloat(document.getElementById("hsf-value1").value)  + color_val) + ",50%,50%)";
+            }
+
+            if (fractral_str[i] == '-') {
+                if (random_angle_state)
+                    t -= GetRandomInt(parseInt(document.getElementById("randomize-angle-value1").value), parseInt(document.getElementById("randomize-angle-value2").value));
+                else
+                    t -= angle;
+            } else if (fractral_str[i] == '+') {
+                if (random_angle_state)
+                    t += GetRandomInt(parseInt(document.getElementById("randomize-angle-value1").value), parseInt(document.getElementById("randomize-angle-value2").value));
+                else
+                    t += angle;
+
+            } else if (fractral_str[i] == '[') {
+                var old_val = {
+                    x: tmpX,
+                    y: tmpY,
+                    t: t
+                }
+
+                old_vals.push(old_val);
+
+            } else if (fractral_str[i] == ']') {
+
+                var old_val = old_vals.pop();
+                t = old_val.t;
+                tmpX = old_val.x;
+                tmpY = old_val.y;
+
+            } else if (fractral_str[i] == 'F') {
+                var a = PolarToRect(pix_per_dot, DegToRad(t));
+
+                DrawLine(tmpX, tmpY, a[0] + tmpX, a[1] + tmpY);
+
+                tmpX = a[0] + tmpX;
+                tmpY = a[1] + tmpY;
+            }
+        }
+        return true;
+    }
+
+
+</script>
+
+</body>
+</html>
