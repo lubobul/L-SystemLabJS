@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>L-system lab 1.2</title>
+
+    <style>
+        body {
+            font-size: .85em;
+            font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+            color: #232323;
+            background-color: #fafafa;
+        }
+
+        header,
+        footer,
+        nav,
+        section {
+            display: block;
+        }
+
+        /* Styles for basic forms
+        -----------------------------------------------------------*/
+
+        fieldset {
+            border: 1px solid #ddd;
+            padding: 0 1.4em 1.4em 1.4em;
+            margin: 0 0 1.5em 0;
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        textarea {
+            min-height: 75px;
+        }
+
+        .editor-label {
+            margin: 1em 0 0 0;
+        }
+
+        .editor-field {
+            margin: 0.5em 0 0 0;
+        }
+
+        h1 {
+            display: block;
+            font-size: 2em;
+            -webkit-margin-before: 0.67em;
+            -webkit-margin-after: 0.67em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+            font-weight: bold;
+        }
+
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            -webkit-margin-before: 1em;
+            -webkit-margin-after: 1em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+            font-weight: bold;
+        }
+
+        h4 {
+            display: block;
+            -webkit-margin-before: 1.33em;
+            -webkit-margin-after: 1.33em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+            font-weight: bold;
+        }
+
+        p {
+            display: block;
+            -webkit-margin-before: 1em;
+            -webkit-margin-after: 1em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+        }
+
+        .header4 {
+            padding: 2px 0px 2px 0px;
+            margin: 2px 0px 2px 0px;
+            color: gray;
+        }
+
+        button.fractalize {
+            cursor: pointer;
+            padding: 5px 15px;
+            margin-top: 10px;
+            background: gray;
+            border: 1px solid #585858;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 3px;
+            -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            -moz-box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            color: #f3f3f3;
+            font-size: 1.1em;
+        }
+
+        input.my-inputs {
+            padding: 5px 15px;
+            background: #f3f3f3;
+            border: 1px solid #585858;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 3px;
+            width: 5.5em;
+            -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            -moz-box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            box-shadow: 0 0 2px rgba(0, 0, 0, .75);
+            color: #000000;
+            font-size: 1.1em;
+        }
+
+        input.extra-width {
+            width: 14.6em;
+        }
+
+        button.fractalize:hover {
+            background-color: #898989;
+            -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .75);
+            -moz-box-shadow: 0 0 1px rgba(0, 0, 0, .75);
+            box-shadow: 0 0 1px rgba(0, 0, 0, .75);
+        }
+
+        .loading {
+            color: #bd2222;
+            padding-top: 0px;
+            margin-left: 5px;
+            margin-top: 0px;
+        }
+
+        .done {
+            color: #2ab731;
+            padding-top: 0px;
+            margin-left: 5px;
+            margin-top: 0px;
+        }
+
+        .loading-div {
+            padding-top: 10px;
+        }
+
+        #header {
+            color: gray;
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+
+        #footer {
+            color: gray;
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+
+        .menu {
+            float: left;
+            width: 260px;
+            -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            padding: 5px;
+            background-color: white;
+        }
+
+        .canvas-holder {
+            float: left;
+            width: auto;
+            -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            box-shadow: 0 0 3px rgba(0, 0, 0, .75);
+            background-color: white;
+        }
+
+        .menu-canvas-wrapper {
+            width: 1800px;
+            height: auto;
+            margin-bottom: 2em;
+        }
+
+        .info {
+            margin: 0px 2px 0px 2px;
+            padding: 0px 2px 0px 2px;
+            color: gray;
+        }
+
+        .rule2-holder {
+            width: 200px;
+        }
+
+        .rule2-checkbox-label {
+            margin: 0px 2px 0px 2px;
+            padding: 0px 2px 0px 2px;
+            color: gray;
+        }
+
+        .menu-options {
+            width: 1795px;
+            height: 45px;
+            background-color: transparent;
+        }
+
+        .menu-options-button {
+            margin-right: 0.0em;
+        }
+
+        .my-popup {
+            width: 500px;
+            height: 380px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -150px 0 0 -250px;
+            /* [-(height/2)px 0 0 -(width/2)px] */
+            padding: 1em;
+            display: none;
+            background: rgba(0, 0, 0, .8);
+        }
+
+        .loading-popup {
+            width: 102px;
+            height: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -15px 0 0 -48px;
+            /* [-(height/2)px 0 0 -(width/2)px] */
+            padding: 0;
+            display: none;
+            background: rgba(0, 0, 0, .8);
+        }
+
+        .close-poppup {
+            float: right;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .close-poppup:hover {
+            float: right;
+            border: none;
+            background-color: #f3f3f3;
+            cursor: pointer;
+        }
+
+        p.text-rendering {
+            color: white;
+            padding: 2px 5px 0px 5px;
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        h4.stats {
+            padding: 0px 0px 2px 2px;
+            margin: 0px 0px 2px 2px;
+            color: #83d53b;
+            position: absolute;
+            display: block;
+            font-weight: normal !important;
+            pointer-events: none !important;
+        }
+
+        .second-stat {
+            margin-top: 1.2em !important;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="loading-popup" class="loading-popup">
+        <p class="text-rendering">Rendering...</p>
+    </div>
+    <div id="popup" class="my-popup">
+        <button class="close-poppup" onclick="closeAbout()">X</button>
+        <h3 class="header4" style="color:white">Source code </h3>
+        <a style="color:white" href="https://github.com/lubobul/L-SystemLabJS" target="_blank">Get the code</a>
+        <h3 class="header4" style="color:white">Rules </h3>
+        <p style="color:white"> F = Draw straight; Minus = Turn anti-clockwise; Plus = Turn clockwise; X does not correspond to any drawing action
+            and is used to control the evolution of the curve.</p>
+        <p style="color:white"> [ corresponds to saving the current values for position and angle, which are restored when the corresponding ] is
+            executed.</p>
+        <h3 class="header4" style="color:white">About </h3>
+        <p style="color:white" class="about-info">
+            This tool is intended for experimenting with L-systems defined by up to 2 rules. Calculation of huge L-systems will be rendered
+            slower or may freeze your browser. Code for handling such cases is not implemented in the current version.
+        </p>
+    </div>
+
+    <h1 id="header">Welcome to L-system Lab</h1>
+
+    <h3 class="header4">What are you waiting for? Plant a seed and examine the beauty and complexity that will arise.</h3>
+
+    <div class="menu-canvas-wrapper">
+
+        <div class="menu-options">
+
+            <button class="fractalize menu-options-button" onclick="renderKochCurve()">Koch Curve</button>
+            <button class="fractalize menu-options-button" onclick="renderLevyCurve()">Levy C Curve</button>
+            <button class="fractalize menu-options-button" onclick="renderTree()">Tree</button>
+            <button class="fractalize menu-options-button" onclick="renderOther1()">Other 1</button>
+            <button class="fractalize menu-options-button" onclick="renderOther2()">Other 2</button>
+            <button class="fractalize menu-options-button" onclick="about()">About</button>
+        </div>
+        <div class="menu">
+
+            <h3 class="header4">Settings</h3>
+            <h4 class="header4">Rule 1 </h4>
+
+            <div style="width:500px">
+                <input id="seed1" class="my-inputs extra-width" type="text" value="+F--F+" required />
+            </div>
+
+            <div style="width:100px;">
+                <h4 class="header4">Rule 2 </h4>
+                <input id="rule2_select" onclick="changeInputBoxState()" type="checkbox" />
+                <label class="rule2-checkbox-label" id="rule2-checkbox-label">Disabled</label>
+
+            </div>
+
+            <div style="width:500px;">
+                <input id="seed2" class="my-inputs extra-width" type="text" value="FF" required="required" readonly />
+            </div>
+
+            <h4 class="header4">Angle to turn </h4>
+            <input id="angle" class="my-inputs" type="number" value="45" min="0" max="360" required />
+            <h4 class="header4">Drawing line length</h4>
+            <input id="pix-per-dot" class="my-inputs" type="number" value="10" min="1" max="200" required />
+            <h4 class="header4">Iterations </h4>
+            <input id="ittr" class="my-inputs" type="number" value="9" min="1" max="100" required />
+
+            <div id="color-wheel-container">
+                <h4 class="header4">Color wheel 0-360</h4>
+                <input id="color" onclick="changeColorState()" type="checkbox" />
+                <label class="rule2-checkbox-label" id="color-checkbox-label">Disabled</label>
+                <div style="width:500px;">
+                    <input id="hsf-value1" class="my-inputs" type="number" value="0" min="0" max="360" required=r eadonly />
+                    <label class="rule2-checkbox-label">-</label>
+                    <input id="hsf-value2" class="my-inputs" type="number" value="360" min="0" max="360" required readonly />
+                </div>
+            </div>
+
+            <h4 class="header4">Randomize angle between 0-360</h4>
+            <input id="angle-state" onclick="changeRandomizeAngleState()" type="checkbox" />
+            <label class="rule2-checkbox-label" id="randomize-angle-checkbox-label">Disabled</label>
+            <div style="width:500px;">
+                <input id="randomize-angle-value1" class="my-inputs" type="number" value="35" min="0" max="360" required readonly />
+                <label class="rule2-checkbox-label">-</label>
+                <input id="randomize-angle-value2" class="my-inputs" type="number" value="45" min="0" max="360" required readonly />
+            </div>
+
+            <h3 class="header4">Starting coordinates</h3>
+            <p class="info">Click on the canvas to select the starting coordinates</p>
+            <h4 class="header4">Offset X </h4>
+            <input id="offset-x" class="my-inputs" type="number" value="500" required/>
+            <h4 class="header4">Offset Y </h4>
+            <input id="offset-y" class="my-inputs" type="number" value="250" required />
+
+            <h4 class="header4">Pretty mode (it takes longer to render)</h4>
+            <input id="pretty-mode" onclick="changeRenderMode()" type="checkbox" />
+            <label class="rule2-checkbox-label" id="pretty-mode-label">Enabled</label>
+
+            <br />
+
+            <button class="fractalize" style="float:none" onclick="render()">Render</button>
+        </div>
+
+        <div class="canvas-holder" style="background-color:white;">
+            <h4 class="stats" id="time-to-render">Render time: </h4>
+            <h4 class="stats second-stat" id="num-of-instructions">Instructions: </h4>
+            <canvas id="canvas" width="1500" height="800" tabindex="0"></canvas>
+        </div>
+
+    </div>
+
+
+</body>
+    <script src="lsystemlab.js"></script>
+</html>
